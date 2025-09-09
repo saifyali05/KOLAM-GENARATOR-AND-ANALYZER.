@@ -1,3 +1,4 @@
+#THIS WEB APP IS DEVELOPED FOR SIH 2K25 PROBLEM STATEMENT OF AICTE.
 # KOLAM-GENARATOR-AND-ANALYZER.
 A culturally-rich web application for generating and analyzing traditional Indian Kolam/Rangoli patterns.
 Kolam Generator bridges traditional Indian art with modern technology, enabling users to create, analyze, and explore ancient Kolam/Rangoli patterns through an interactive platform featuring authentic Indian cultural elements.
@@ -14,4 +15,4 @@ Kolam Generator bridges traditional Indian art with modern technology, enabling 
 🛠️ Technology Stack
 Frontend: HTML5, CSS3, JavaScript (ES6+)
 Design: Glassmorphism, Sacred geometry patterns
-APIs: Canvas API for real-time generation
+APIs: Canvas API for real-time generation.
