@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kolam Generator - Digital Heritage Art</title>
+    <link rel="stylesheet" href="main-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-mandala"></i>
+                <span>Kolam Generator</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#generator" class="nav-link active">Generator</a>
+                <a href="#analyzer" class="nav-link">Analyzer</a>
+                <a href="#gallery" class="nav-link">Gallery</a>
+                <div class="nav-profile">
+                    <button class="profile-btn" onclick="toggleProfileMenu()">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+                    <div class="profile-menu" id="profileMenu">
+                        <a href="login.html">Login</a>
+                        <a href="signup.html">Sign Up</a>
+                        <a href="index.html">Home</a>
+                        <a href="#" onclick="logout()">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Kolam Generator Section -->
+        <section id="generator" class="section generator-section active">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="section-title">Kolam Generator</h1>
+                    <p class="section-subtitle">Create beautiful Kolam patterns using grid points and symmetry</p>
+                </div>
+                
+                <div class="generator-content">
+                    <!-- Input Panel -->
+                    <div class="input-panel">
+                        <div class="panel-card">
+                            <h3 class="card-title">
+                                <i class="fas fa-cog"></i>
+                                Pattern Configuration
+                            </h3>
+                            
+                            <div class="form-group">
+                                <label for="gridSize">Grid Size</label>
+                                <div class="input-row">
+                                    <input type="number" id="gridWidth" placeholder="Width" min="3" max="20" value="8">
+                                    <span class="input-separator">×</span>
+                                    <input type="number" id="gridHeight" placeholder="Height" min="3" max="20" value="8">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="symmetry">Symmetry Type</label>
+                                <select id="symmetry" class="form-select">
+                                    <option value="radial">Radial (4-fold)</option>
+                                    <option value="radial8">Radial (8-fold)</option>
+                                    <option value="bilateral">Bilateral</option>
+                                    <option value="rotational">Rotational</option>
+                                    <option value="none">No Symmetry</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="pattern">Pattern Complexity</label>
+                                <div class="slider-group">
+                                    <input type="range" id="complexity" min="1" max="10" value="5" class="form-slider">
+                                    <span class="slider-value" id="complexityValue">5</span>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Color Scheme</label>
+                                <div class="color-palette-selector">
+                                    <div class="color-option active" data-scheme="traditional">
+                                        <div class="color-preview">
+                                            <span style="background: #ff6b6b;"></span>
+                                            <span style="background: #ffd93d;"></span>
+                                            <span style="background: #54a0ff;"></span>
+                                        </div>
+                                        <span>Traditional</span>
+                                    </div>
+                                    <div class="color-option" data-scheme="festival">
+                                        <div class="color-preview">
+                                            <span style="background: #ff9f43;"></span>
+                                            <span style="background: #10ac84;"></span>
+                                            <span style="background: #ee5a24;"></span>
+                                        </div>
+                                        <span>Festival</span>
+                                    </div>
+                                    <div class="color-option" data-scheme="monochrome">
+                                        <div class="color-preview">
+                                            <span style="background: #2f3542;"></span>
+                                            <span style="background: #57606f;"></span>
+                                            <span style="background: #a4b0be;"></span>
+                                        </div>
+                                        <span>Monochrome</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn btn-primary" onclick="generateKolam()">
+                                    <i class="fas fa-magic"></i>
+                                    Generate Kolam
+                                </button>
+                                <button class="btn btn-secondary" onclick="clearCanvas()">
+                                    <i class="fas fa-eraser"></i>
+                                    Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Canvas Panel -->
+                    <div class="canvas-panel">
+                        <div class="panel-card">
+                            <div class="canvas-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-paint-brush"></i>
+                                    Kolam Canvas
+                                </h3>
+                                <div class="canvas-tools">
+                                    <button class="tool-btn" onclick="downloadKolam()" title="Download">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="tool-btn" onclick="shareKolam()" title="Share">
+                                        <i class="fas fa-share"></i>
+                                    </button>
+                                    <button class="tool-btn" onclick="saveToGallery()" title="Save to Gallery">
+                                        <i class="fas fa-bookmark"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="canvas-container">
+                                <canvas id="kolamCanvas" width="500" height="500"></canvas>
+                                <div class="grid-overlay" id="gridOverlay"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Kolam Analyzer Section -->
+        <section id="analyzer" class="section analyzer-section">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="section-title">Kolam Analyzer</h1>
+                    <p class="section-subtitle">Upload and analyze existing Kolam patterns to extract grid points and symmetry</p>
+                </div>
+                
+                <div class="analyzer-content">
+                    <!-- Upload Panel -->
+                    <div class="upload-panel">
+                        <div class="panel-card">
+                            <h3 class="card-title">
+                                <i class="fas fa-upload"></i>
+                                Upload Kolam Image
+                            </h3>
+                            
+                            <div class="upload-area" id="uploadArea">
+                                <div class="upload-content">
+                                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                    <h4>Drag & Drop your Kolam image here</h4>
+                                    <p>or click to browse files</p>
+                                    <button class="btn btn-outline" onclick="document.getElementById('imageInput').click()">
+                                        Choose File
+                                    </button>
+                                    <input type="file" id="imageInput" accept="image/*" hidden>
+                                </div>
+                            </div>
+                            
+                            <div class="upload-options">
+                                <div class="form-group">
+                                    <label>Analysis Options</label>
+                                    <div class="checkbox-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="detectGrid" checked>
+                                            <span class="checkmark"></span>
+                                            Detect Grid Points
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="detectSymmetry" checked>
+                                            <span class="checkmark"></span>
+                                            Analyze Symmetry
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="detectColors" checked>
+                                            <span class="checkmark"></span>
+                                            Extract Colors
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn btn-primary" onclick="analyzeImage()" id="analyzeBtn" disabled>
+                                    <i class="fas fa-search"></i>
+                                    Analyze Image
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Results Panel -->
+                    <div class="results-panel">
+                        <div class="panel-card">
+                            <div class="results-header">
+                                <h3 class="card-title">
+                                    <i class="fas fa-chart-bar"></i>
+                                    Analysis Results
+                                </h3>
+                                <div class="results-actions">
+                                    <button class="tool-btn" onclick="exportResults()" title="Export Results">
+                                        <i class="fas fa-file-export"></i>
+                                    </button>
+                                    <button class="tool-btn" onclick="recreatePattern()" title="Recreate Pattern">
+                                        <i class="fas fa-sync"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="results-content" id="resultsContent">
+                                <div class="no-results">
+                                    <i class="fas fa-image"></i>
+                                    <p>Upload and analyze an image to see results here</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="section gallery-section">
+            <div class="container">
+                <div class="section-header">
+                    <h1 class="section-title">Kolam Gallery</h1>
+                    <p class="section-subtitle">Explore and manage your created Kolam patterns</p>
+                </div>
+                
+                <div class="gallery-filters">
+                    <button class="filter-btn active" data-filter="all">All Patterns</button>
+                    <button class="filter-btn" data-filter="generated">Generated</button>
+                    <button class="filter-btn" data-filter="analyzed">Analyzed</button>
+                    <button class="filter-btn" data-filter="favorites">Favorites</button>
+                </div>
+                
+                <div class="gallery-grid" id="galleryGrid">
+                    <!-- Gallery items will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Cultural Background Elements -->
+    <div class="cultural-background">
+        <!-- Indian Monuments Images -->
+        <div class="monuments-container">
+            <!-- Taj Mahal Image -->
+            <div class="monument-image taj-mahal-img">
+                <div class="monument-photo taj-mahal-photo" style="background-image: url('https://images.unsplash.com/photo-1564507592333-c60657eea523?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');"></div>
+                <div class="monument-label">Taj Mahal</div>
+            </div>
+            
+            <!-- Red Fort Image -->
+            <div class="monument-image red-fort-img">
+                <div class="monument-photo red-fort-photo" style="background-image: url('https://images.unsplash.com/photo-1587474260584-136574528ed5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');"></div>
+                <div class="monument-label">India Gate</div>
+            </div>
+            
+            <!-- Gateway of India Image -->
+            <div class="monument-image gateway-india-img">
+                <div class="monument-photo gateway-india-photo" style="background-image: url('https://images.unsplash.com/photo-1570168007204-dfb528c6958f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');"></div>
+                <div class="monument-label">Gateway of India</div>
+            </div>
+        </div>
+        
+        <!-- Floating Cultural Elements -->
+        <div class="floating-elements">
+            <div class="floating-rangoli rangoli1">
+                <svg viewBox="0 0 50 50">
+                    <circle cx="25" cy="25" r="20" fill="none" stroke="rgba(255, 107, 107, 0.3)" stroke-width="2"/>
+                    <circle cx="25" cy="25" r="10" fill="rgba(255, 217, 61, 0.4)"/>
+                </svg>
+            </div>
+            <div class="floating-rangoli rangoli2">
+                <svg viewBox="0 0 50 50">
+                    <rect x="15" y="15" width="20" height="20" fill="none" stroke="rgba(84, 160, 255, 0.3)" stroke-width="2" transform="rotate(45 25 25)"/>
+                </svg>
+            </div>
+            <div class="floating-rangoli rangoli3">
+                <svg viewBox="0 0 50 50">
+                    <polygon points="25,5 40,40 10,40" fill="rgba(95, 39, 205, 0.3)"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <i class="toast-icon"></i>
+            <span class="toast-message"></span>
+        </div>
+        <button class="toast-close" onclick="hideToast()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <script src="main-script.js"></script>
+</body>
+</html>
